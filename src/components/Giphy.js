@@ -1,5 +1,7 @@
 import React from 'react'
 
+import './styles/Giphy.css'
+
 class Giphy extends React.Component {
   constructor (props) {
     super(props)

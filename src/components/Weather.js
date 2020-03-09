@@ -3,6 +3,11 @@ import './styles/Weather.css'
 
 import Giphy from './Giphy'
 
+function roundTemps (temp) {
+  // Round our temperatures to two decimal places at most
+  return Math.round(temp * 100) / 100
+}
+
 class Weather extends React.Component {
   constructor (props) {
     super(props)
@@ -32,10 +37,10 @@ class Weather extends React.Component {
 
       if (storedUnits === 'metric' && units === 'imperial') {
         // metric -> imperial
-        data.main.temp = (currTemp * (9 / 5)) + 32
+        data.main.temp = roundTemps((currTemp * (9 / 5)) + 32)
       } else if (storedUnits === 'imperial' && units === 'metric') {
         // imperial -> metric
-        data.main.temp = (currTemp - 32) * (5 / 9)
+        data.main.temp = roundTemps((currTemp - 32) * (5 / 9))
       }
     }
 
@@ -136,13 +141,16 @@ class Weather extends React.Component {
 
     return (
       <div id="weather-container">
-        <div id="temperature-selection">
-          <input type="radio" name="units" id="celsius" value="metric" onClick={this.handleUnits}/>
-          <label htmlFor="celsius">°C</label>
-          <input defaultChecked type="radio" name="units" id="farenheit" value="imperial" onClick={this.handleUnits}/>
-          <label htmlFor="farenheit">°F</label>
+
+        <div id="weather-entries">
+          <div id="temperature-selection">
+            <input type="radio" name="units" id="celsius" value="metric" onClick={this.handleUnits}/>
+            <label htmlFor="celsius">°C</label>
+            <input defaultChecked type="radio" name="units" id="farenheit" value="imperial" onClick={this.handleUnits}/>
+            <label htmlFor="farenheit">°F</label>
+          </div>
+          <input type="text" id="search" placeholder="New York" onKeyDown={this.handleSearch}/>
         </div>
-        <input type="text" id="search" placeholder="New York" onKeyDown={this.handleSearch}/>
         <WeatherDisplay retrieved={this.state.retrieved} data={this.state.data} units={this.state.units} errMsg={this.state.errMsg} />
         <Giphy weatherData={this.state.data}/>
       </div>
