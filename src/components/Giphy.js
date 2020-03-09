@@ -16,8 +16,8 @@ class Giphy extends React.Component {
   async getData () {
     const weather = this.props.weatherData.weather[0].main
 
-    const giphyApiKey = process.env.REACT_APP_GIPHY_API_KEY
-    const giphyURL = `https://api.giphy.com/v1/gifs/translate?api_key=${giphyApiKey}&s=${weather}`
+    const superSecretApiKeyPlzNoSteal = 'vy6ld9Wo9MZVtkZDxMOtas9GCD2dnaGd'
+    const giphyURL = `https://api.giphy.com/v1/gifs/translate?api_key=${superSecretApiKeyPlzNoSteal}&s=${weather}`
 
     const response = await fetch(giphyURL, { mode: 'cors' })
     const data = await response.json()

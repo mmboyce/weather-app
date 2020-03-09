@@ -81,9 +81,9 @@ class Weather extends React.Component {
   async handleData () {
     const { cityName, units } = this.state
 
-    const weatherApiKey = process.env.REACT_APP_WEATHER_API_KEY
+    const superSecretApiKeyPlzNoSteal = '69329efdd58f9bc2cda118a18ae27b59'
 
-    const apiURL = `https://api.openweathermap.org/data/2.5/weather?q=${cityName}&appid=${weatherApiKey}&units=${units}`
+    const apiURL = `https://api.openweathermap.org/data/2.5/weather?q=${cityName}&appid=${superSecretApiKeyPlzNoSteal}&units=${units}`
     const response = await fetch(apiURL, { mode: 'cors' })
 
     let data
