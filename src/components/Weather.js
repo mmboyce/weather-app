@@ -114,10 +114,12 @@ class Weather extends React.Component {
       const { retrieved, data, units, errMsg } = props
 
       if (retrieved) {
-        temperature = data.main.temp
-        weatherType = data.weather[0].main
-        location = data.name
+        location = `In ${data.name}`
+        temperature = `It's ${data.main.temp}`
+        weatherType = `Expect ${data.weather[0].main}`
+
         degrees = units === 'metric' ? '°C' : '°F'
+        degrees = `${degrees} outside`
       } else if (retrieved === null) {
         temperature = 'Oops!'
         weatherType = errMsg
@@ -125,9 +127,9 @@ class Weather extends React.Component {
 
       return (
         <div id="weather-display">
+          <p>{location}</p>
           <p>{`${temperature}${degrees}`}</p>
           <p>{weatherType}</p>
-          <p>{location}</p>
         </div>
       )
     }
