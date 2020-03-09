@@ -1,6 +1,8 @@
 import React from 'react'
 import './styles/Weather.css'
 
+import Giphy from './Giphy'
+
 class Weather extends React.Component {
   constructor (props) {
     super(props)
@@ -79,8 +81,6 @@ class Weather extends React.Component {
     const apiURL = `https://api.openweathermap.org/data/2.5/weather?q=${cityName}&appid=${weatherApiKey}&units=${units}`
     const response = await fetch(apiURL, { mode: 'cors' })
 
-    console.log(response)
-
     let data
 
     if (response.ok) {
@@ -116,7 +116,7 @@ class Weather extends React.Component {
       if (retrieved) {
         location = `In ${data.name}`
         temperature = `It's ${data.main.temp}`
-        weatherType = `Expect ${data.weather[0].main}`
+        weatherType = `Weather: ${data.weather[0].main}`
 
         degrees = units === 'metric' ? '°C' : '°F'
         degrees = `${degrees} outside`
@@ -144,7 +144,7 @@ class Weather extends React.Component {
         </div>
         <input type="text" id="search" placeholder="New York" onKeyDown={this.handleSearch}/>
         <WeatherDisplay retrieved={this.state.retrieved} data={this.state.data} units={this.state.units} errMsg={this.state.errMsg} />
-        {/* TODO: Use state to load gifs */}
+        <Giphy weatherData={this.state.data}/>
       </div>
     )
   }
