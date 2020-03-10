@@ -1,4 +1,5 @@
 import React from 'react'
+import PropTypes from 'prop-types'
 
 import './styles/Giphy.css'
 
@@ -111,6 +112,24 @@ class Giphy extends React.Component {
       </div>
     )
   }
+}
+
+// All we need from weatherData is the type of weather which looks like
+// {
+//   weather: [
+//     {
+//       main: 'Clouds'
+//     }
+//   ]
+// }
+Giphy.propTypes = {
+  weatherData: PropTypes.shape({
+    weather: PropTypes.arrayOf(PropTypes.shape(
+      {
+        main: PropTypes.string.isRequired
+      }).isRequired
+    ).isRequired
+  })
 }
 
 export default Giphy

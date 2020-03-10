@@ -1,4 +1,5 @@
 import React from 'react'
+import PropTypes from 'prop-types'
 import './styles/Weather.css'
 
 import Giphy from './Giphy'
@@ -8,6 +9,69 @@ function roundTemps (temp) {
   return Math.round(temp * 100) / 100
 }
 
+function WeatherDisplay (props) {
+  let temperature = ''
+  let weatherType = ''
+  let location = ''
+  let degrees = ''
+
+  const { retrieved, data, units, errMsg } = props
+
+  if (retrieved === 1) {
+    location = `In ${data.name}`
+    temperature = `It's ${data.main.temp}`
+    weatherType = `Weather: ${data.weather[0].main}`
+
+    degrees = units === 'metric' ? '°C' : '°F'
+    degrees = `${degrees} outside`
+  } else if (retrieved === -1) {
+    temperature = 'Oops!'
+    weatherType = errMsg
+  }
+
+  return (
+    <div id="weather-display">
+      <p>{location}</p>
+      <p>{`${temperature}${degrees}`}</p>
+      <p>{weatherType}</p>
+    </div>
+  )
+}
+
+WeatherDisplay.propTypes = {
+  retrieved: PropTypes.oneOf(
+    [
+      -1,
+      0,
+      1
+    ]
+  ).isRequired,
+  data: PropTypes.shape(
+    {
+      weather: PropTypes.arrayOf(
+        PropTypes.shape(
+          {
+            main: PropTypes.string
+          }
+        )
+      ),
+      main: PropTypes.shape(
+        {
+          temp: PropTypes.number
+        }
+      ),
+      name: PropTypes.string
+    }
+  ),
+  units: PropTypes.oneOf(
+    [
+      'metric',
+      'imperial'
+    ]
+  ),
+  errMsg: PropTypes.string
+}
+
 class Weather extends React.Component {
   constructor (props) {
     super(props)
@@ -15,7 +79,12 @@ class Weather extends React.Component {
     this.state = {
       cityName: 'New York',
       units: 'imperial',
-      retrieved: false
+      retrieved: 0
+      /*
+        retrieved = -1 : error
+        retrieved =  0 : false, not yet retrieved
+        retrievied = 1 :
+       */
     }
 
     this.handleData = this.handleData.bind(this)
@@ -52,7 +121,7 @@ class Weather extends React.Component {
   handleWeather (json) {
     this.setState(
       {
-        retrieved: true,
+        retrieved: 1,
         data: json
       }
     )
@@ -72,7 +141,7 @@ class Weather extends React.Component {
 
     this.setState(
       {
-        retrieved: null,
+        retrieved: -1,
         errMsg: msg
       }
     )
@@ -110,35 +179,6 @@ class Weather extends React.Component {
   }
 
   render () {
-    function WeatherDisplay (props) {
-      let temperature = ''
-      let weatherType = ''
-      let location = ''
-      let degrees = ''
-
-      const { retrieved, data, units, errMsg } = props
-
-      if (retrieved) {
-        location = `In ${data.name}`
-        temperature = `It's ${data.main.temp}`
-        weatherType = `Weather: ${data.weather[0].main}`
-
-        degrees = units === 'metric' ? '°C' : '°F'
-        degrees = `${degrees} outside`
-      } else if (retrieved === null) {
-        temperature = 'Oops!'
-        weatherType = errMsg
-      }
-
-      return (
-        <div id="weather-display">
-          <p>{location}</p>
-          <p>{`${temperature}${degrees}`}</p>
-          <p>{weatherType}</p>
-        </div>
-      )
-    }
-
     return (
       <div id="weather-container">
 
