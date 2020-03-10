@@ -2,11 +2,21 @@ import React from 'react'
 
 import './styles/Giphy.css'
 
+const hidden = {
+  display: 'none'
+}
+
+const visible = {
+  display: 'block'
+}
+
 class Giphy extends React.Component {
   constructor (props) {
     super(props)
     this.state = {
-      isLoaded: false
+      isLoaded: false,
+      loadingStyle: hidden,
+      giphyStyle: hidden
     }
 
     this.getData = this.getData.bind(this)
@@ -33,7 +43,9 @@ class Giphy extends React.Component {
       {
         url: url,
         alt: alt,
-        isLoaded: true
+        isLoaded: true,
+        loadingStyle: hidden,
+        giphyStyle: visible
       }
     )
   }
@@ -41,7 +53,9 @@ class Giphy extends React.Component {
   componentDidUpdate (prevProps) {
     if (prevProps.weatherData !== this.props.weatherData) {
       this.setState({
-        isLoaded: false
+        isLoaded: false,
+        loadingStyle: visible,
+        giphyStyle: hidden
       })
     }
   }
@@ -53,7 +67,8 @@ class Giphy extends React.Component {
 
     return (
       <div id="giphy-display">
-        <img alt={this.state.alt} src={this.state.url} />
+        <img style={this.state.loadingStyle} id="loading" src={process.env.PUBLIC_URL + '/img/loading.gif'} alt='loading' />
+        <img style={this.state.giphyStyle} alt={this.state.alt} src={this.state.url} />
       </div>
     )
   }
