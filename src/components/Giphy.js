@@ -14,13 +14,14 @@ class Giphy extends React.Component {
   constructor (props) {
     super(props)
     this.state = {
-      isLoaded: false,
+      isRetrieved: false,
       loadingStyle: hidden,
       giphyStyle: hidden
     }
 
     this.getData = this.getData.bind(this)
     this.loadImage = this.loadImage.bind(this)
+    this.handleLoad = this.handleLoad.bind(this)
   }
 
   async getData () {
@@ -43,9 +44,7 @@ class Giphy extends React.Component {
       {
         url: url,
         alt: alt,
-        isLoaded: true,
-        loadingStyle: hidden,
-        giphyStyle: visible
+        isRetrieved: true
       }
     )
   }
@@ -53,22 +52,29 @@ class Giphy extends React.Component {
   componentDidUpdate (prevProps) {
     if (prevProps.weatherData !== this.props.weatherData) {
       this.setState({
-        isLoaded: false,
+        isRetrieved: false,
         loadingStyle: visible,
         giphyStyle: hidden
       })
     }
   }
 
+  handleLoad () {
+    this.setState({
+      giphyStyle: visible,
+      loadingStyle: hidden
+    })
+  }
+
   render () {
-    if (this.props.weatherData !== undefined && !this.state.isLoaded) {
+    if (this.props.weatherData !== undefined && !this.state.isRetrieved) {
       this.getData().then(this.loadImage)
     }
 
     return (
       <div id="giphy-display">
         <img style={this.state.loadingStyle} id="loading" src={process.env.PUBLIC_URL + '/img/loading.gif'} alt='loading' />
-        <img style={this.state.giphyStyle} alt={this.state.alt} src={this.state.url} />
+        <img onLoad={this.handleLoad} style={this.state.giphyStyle} id="giphy" alt={this.state.alt} src={this.state.url} />
       </div>
     )
   }
